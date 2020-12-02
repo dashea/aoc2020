@@ -1,0 +1,49 @@
+cabal-version:       3.0
+
+name:                aoc2020
+version:             0.1.0.0
+synopsis:            Advent of Code 2020 problems
+description:         Haskell programs implemnting Advent of Code 2020
+license:             GPL-3.0-or-later
+author:              David Shea
+maintainer:          reallylongword@gmail.com
+category:            Exercise
+build-type:          Simple
+
+data-files:          input-day1
+
+source-repository head
+  type:              git
+  location:          https://github.com/dashea/aoc2020
+
+executable 1-1
+  main-is:           1-1.hs
+  build-depends:     base >=4.14 && <4.15
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
+
+executable 1-2
+  main-is:           1-2.hs
+  build-depends:     base >=4.14 && <4.15
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
+
+executable 2-1
+  main-is:           2-1.hs
+  build-depends:     base >=4.14 && <4.15,
+                     attoparsec >= 0.13.2.4 && <0.14,
+                     text >=1.2.3.2 && <1.3
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror

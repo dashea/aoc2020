@@ -4,5 +4,5 @@ main = do
     input <- map read . lines <$> getContents
     let products = [x*y | (x:ys) <- tails input,
                           y <- ys,
-                          (x + y) == 2020]
+                          (x + y) == (2020 :: Int)]
     print $ head products

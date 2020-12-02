@@ -5,5 +5,5 @@ main = do
     let products = [x*y*z | (x:ys) <- tails input,
                             (y:zs) <- tails ys,
                             z <- zs,
-                            (x + y + z) == 2020]
+                            (x + y + z) == (2020 :: Int)]
     print $ head products
