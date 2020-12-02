@@ -47,3 +47,16 @@ executable 2-1
                      -Wredundant-constraints
                      -Wpartial-fields
                      -Werror
+
+executable 2-2
+  main-is:           2-2.hs
+  build-depends:     base >=4.14 && <4.15,
+                     attoparsec >= 0.13.2.4 && <0.14,
+                     listsafe >=0.1.0.1 && <0.2,
+                     text >=1.2.3.2 && <1.3
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
