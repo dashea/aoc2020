@@ -60,3 +60,27 @@ executable 2-2
                      -Wredundant-constraints
                      -Wpartial-fields
                      -Werror
+
+executable 3-1
+  main-is:           3-1.hs
+  build-depends:     base >=4.14 && <4.15,
+                     exceptions >=0.10.4 && <0.11,
+                     vector >=0.12.1.2 && <0.13
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
+
+executable 3-2
+  main-is:           3-2.hs
+  build-depends:     base >=4.14 && <4.15,
+                     exceptions >=0.10.4 && <0.11,
+                     vector >=0.12.1.2 && <0.13
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
