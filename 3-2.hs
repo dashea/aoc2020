@@ -1,23 +1,16 @@
-import Control.Monad.Catch (Exception, MonadThrow, throwM)
 import Data.Vector (Vector, (!?), fromList)
-import Type.Reflection (Typeable)
-
-data AoCException = ParseError
- deriving (Show, Typeable)
-
-instance Exception AoCException
 
 data TreeSquare = Empty | Tree
 
 type Forest = Vector (Vector TreeSquare)
 type Point = (Int, Int)
 
-parseTreeLine :: MonadThrow m => String -> m (Vector TreeSquare)
+parseTreeLine :: MonadFail m => String -> m (Vector TreeSquare)
 parseTreeLine input = fromList <$> mapM parseChar input
  where
     parseChar '.' = return Empty
     parseChar '#' = return Tree
-    parseChar _   = throwM ParseError
+    parseChar x   = fail $ "Bad character: " ++ [x]
 
 checkPoint :: Forest -> Point -> Maybe TreeSquare
 -- treat each row as infinitely repeating
