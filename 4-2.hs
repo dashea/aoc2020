@@ -95,7 +95,7 @@ passportFieldParser = do
     hgtParser :: Parser Height
     hgtParser = do
         val <- decimal
-        choice [hgtCmParser val, hgtInParser val]
+        hgtCmParser val <|> hgtInParser val
 
     hgtCmParser x = string "cm" >> guard (x >= 150 && x <= 193) >> return (HeightCm x)
     hgtInParser x = string "in" >> guard (x >=  59 && x <=  76) >> return (HeightIn x)
