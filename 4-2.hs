@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import           Control.Applicative ((<|>))
-import           Control.Monad (guard, void)
+import           Control.Monad (foldM, guard, void)
 import           Data.Attoparsec.Text.Lazy
 import           Data.Char (isSpace)
 import           Data.Maybe (isJust)
@@ -129,18 +129,19 @@ readOrFail :: (MonadFail m, Read a) => String -> m a
 readOrFail input = maybe (fail "Invalid data") return $ readMaybe input
 
 passportParser :: Parser Passport
-passportParser = (foldl parseFields emptyBuilder <$> passportFieldParser `sepBy1` takeWhile1 isSpace) >>= finalize
+passportParser = passportFieldParser `sepBy1` takeWhile isSpace >>= foldM parseFields emptyBuilder >>= finalize
  where
     emptyBuilder = PassportBuilder Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing
 
-    parseFields p (Byr x) = p { birthYear' = Just x }
-    parseFields p (Iyr x) = p { issueYear' = Just x }
-    parseFields p (Eyr x) = p { expirationYear' = Just x }
-    parseFields p (Hgt x) = p { height' = Just x }
-    parseFields p (Hcl x) = p { hairColor' = Just x }
-    parseFields p (Ecl x) = p { eyeColor' = Just x }
-    parseFields p (Pid x) = p { passportId' = Just x }
-    parseFields p (Cid x) = p { countryId' = Just x }
+    parseFields p@PassportBuilder { birthYear' = Nothing } (Byr x) = return $ p { birthYear' = Just x }
+    parseFields p@PassportBuilder { issueYear' = Nothing } (Iyr x) = return $ p { issueYear' = Just x }
+    parseFields p@PassportBuilder { expirationYear' = Nothing } (Eyr x) = return $ p { expirationYear' = Just x }
+    parseFields p@PassportBuilder { height' = Nothing } (Hgt x) = return $ p { height' = Just x }
+    parseFields p@PassportBuilder { hairColor' = Nothing } (Hcl x) = return $ p { hairColor' = Just x }
+    parseFields p@PassportBuilder { eyeColor' = Nothing } (Ecl x) = return $ p { eyeColor' = Just x }
+    parseFields p@PassportBuilder { passportId' = Nothing } (Pid x) = return $ p { passportId' = Just x }
+    parseFields p@PassportBuilder { countryId' = Nothing } (Cid x) = return $ p { countryId' = Just x }
+    parseFields _ field = fail $ "Duplicate field: " ++ show field
 
     finalize (PassportBuilder (Just byr) (Just iyr) (Just eyr) (Just hgt) (Just hcl) (Just ecl) (Just pid) cid) =
         return $ Passport byr iyr eyr hgt hcl ecl pid cid
