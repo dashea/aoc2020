@@ -22,7 +22,7 @@ main = do
         (shinyGold, (_, bagGraph)) = G.run empty $
                                      G.insMapNodeM "shiny gold" <*
                                      G.insMapNodesM (map fst bags) <*
-                                     mapM_ G.insMapEdgeM edges
+                                     G.insMapEdgesM edges
 
     -- subtract one for the path from the node to itself
     -- part 1
