@@ -178,3 +178,53 @@ executable 7-2
                      -Wredundant-constraints
                      -Wpartial-fields
                      -Werror
+
+executable 8-1
+  main-is:           8-1.hs
+  build-depends:     base >=4.14 && <4.15,
+                     attoparsec >= 0.13.2.4 && <0.14,
+                     containers >=0.6.4.1 && <0.7,
+                     exceptions >=0.10.4 && <0.11,
+                     text >=1.2.3.2 && <1.3,
+                     vector >=0.12.1.2 && <0.13
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
+
+executable 8-2
+  main-is:           8-2.hs
+  build-depends:     base >=4.14 && <4.15,
+                     attoparsec >= 0.13.2.4 && <0.14,
+                     containers >=0.6.4.1 && <0.7,
+                     exceptions >=0.10.4 && <0.11,
+                     text >=1.2.3.2 && <1.3,
+                     vector >=0.12.1.2 && <0.13
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
+
+executable 9-1
+  main-is:           9-1.hs
+  build-depends:     base >=4.14 && <4.15
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
+
+executable 9-2
+  main-is:           9-2.hs
+  build-depends:     base >=4.14 && <4.15
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
