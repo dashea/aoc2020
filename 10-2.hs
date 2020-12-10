@@ -37,8 +37,6 @@ main = do
 
     adapterChain <- maybe (fail "no answer found") return $ tryAdapter 0 adapters
 
-    print adapterChain
-    print $ diffs adapterChain
     let diffPairs = zip (diffs adapterChain ++ [3]) adapterChain
     let splitOnThrees = map (map snd) $ (split . dropFinalBlank . keepDelimsR . whenElt) ((== 3) . fst) diffPairs
     print $ product $ map (length . allPossibilities) splitOnThrees
