@@ -231,8 +231,7 @@ executable 9-2
 
 executable 10-1
   main-is:           10-1.hs
-  build-depends:     base >=4.14 && <4.15,
-                     containers >=0.6.4.1 && <0.7
+  build-depends:     base >=4.14 && <4.15
   default-language:  Haskell2010
   ghc-options:       -Wall
                      -Wincomplete-uni-patterns
@@ -243,7 +242,6 @@ executable 10-1
 executable 10-2
   main-is:           10-2.hs
   build-depends:     base >=4.14 && <4.15,
-                     containers >=0.6.4.1 && <0.7,
                      split >=0.2.3.4 && <0.3
   default-language:  Haskell2010
   ghc-options:       -Wall
