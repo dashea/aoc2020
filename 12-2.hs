@@ -1,5 +1,6 @@
 import Control.Monad.State (State, evalState, get, modify)
 import Data.Bifunctor (first, second)
+import Data.Fixed (mod')
 import Text.Read (readMaybe)
 
 data Movement = North Int
@@ -14,12 +15,12 @@ data Vec = Vec Double Double
 
 type Point = (Int, Int)
 
-turn :: (Ord a, Num a) => a -> a -> a
+turn :: Real a => a -> a -> a
 turn current change = normalize (current + change)
  where
     normalize input
-      | input < 0 = normalize (input + 360)
-      | input > 360 = normalize (input - 360)
+      | input < 0 = 360 + (input `mod'` 360)
+      | input > 360 = input `mod'` 360
       | otherwise = input
 
 toCartesian :: Vec -> Point
