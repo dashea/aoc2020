@@ -6,6 +6,7 @@ import           Control.Monad (foldM, guard, void)
 import           Control.Monad.State (State, evalState, get, gets, modify, put)
 import           Data.Attoparsec.Text.Lazy
 import           Data.Bits
+import           Data.List (subsequences)
 import qualified Data.HashSet as HashSet
 import           Data.HashSet (HashSet)
 import qualified Data.Text.Lazy as TL
@@ -71,12 +72,6 @@ parseProgram :: MonadFail m => TL.Text -> m [Instruction]
 parseProgram input =
     either (\e -> fail $ "Invalid input: " ++ show e) return $ mapM (eitherResult . parse instructionParser) $ TL.lines input
 
-allCombos :: [a] -> [[a]]
-allCombos (x:xs) =
-    let nextCombos = allCombos xs
-     in map (x:) nextCombos ++ nextCombos
-allCombos [] = [[]]
-
 runProgram :: [Instruction] -> Word64
 runProgram input =
     let writes = evalState (concat <$> mapM runInstruction input) (0, [])
@@ -98,7 +93,7 @@ runProgram input =
         let ones = i .|. oneMask
             floatsZero = foldl clearBit ones floatBits
             setAllBits = foldl setBit
-         in map (setAllBits floatsZero) (allCombos floatBits)
+         in map (setAllBits floatsZero) (subsequences floatBits)
 
 main :: IO ()
 main = do
