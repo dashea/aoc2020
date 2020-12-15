@@ -349,7 +349,18 @@ executable 15-1
   main-is:           15-1.hs
   build-depends:     base >=4.14 && <4.15,
                      conduit >=1.3.4 && <1.4,
-                     mtl >=2.2.2 && <2.3,
+                     unordered-containers >=0.2.13.0 && <0.3
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
+
+executable 15-2
+  main-is:           15-2.hs
+  build-depends:     base >=4.14 && <4.15,
+                     conduit >=1.3.4 && <1.4,
                      unordered-containers >=0.2.13.0 && <0.3
   default-language:  Haskell2010
   ghc-options:       -Wall
