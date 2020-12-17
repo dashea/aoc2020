@@ -396,3 +396,27 @@ executable 16-2
                      -Wredundant-constraints
                      -Wpartial-fields
                      -Werror
+
+executable 17-1
+  main-is:           17-1.hs
+  build-depends:     base >=4.14 && <4.15,
+                     array >=0.5.4.0 && <0.6,
+                     exceptions >=0.10.4 && <0.11
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
+
+executable 17-2
+  main-is:           17-2.hs
+  build-depends:     base >=4.14 && <4.15,
+                     array >=0.5.4.0 && <0.6,
+                     exceptions >=0.10.4 && <0.11
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
