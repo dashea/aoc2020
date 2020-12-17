@@ -3,7 +3,7 @@ import           Control.Monad (unless)
 import           Control.Monad.Catch (MonadThrow, throwM)
 import qualified Data.Array as Array
 import           Data.Array (Array, (!), (//), array)
-import           Data.Ix (Ix, index, inRange, range, rangeSize)
+import           Data.Ix (Ix, inRange)
 import           Data.Maybe (fromMaybe)
 
 data AoCException = ArrayIndexOutOfBounds
@@ -15,32 +15,7 @@ instance Exception AoCException
 data Cube = Active | Inactive
  deriving (Eq, Show)
 
-data Point = Point
-    { _xCoord :: Int
-    , _yCoord :: Int
-    , _zCoord :: Int
-    }
- deriving (Eq, Show)
-
-instance Ord Point where
-    compare (Point x1 y1 z1) (Point x2 y2 z2)
-      | z1 /= z2 = z1 `compare` z2
-      | y1 /= y2 = y1 `compare` y2
-      | otherwise = x1 `compare` x2
-
-instance Ix Point where
-    range (Point x1 y1 z1, Point x2 y2 z2) = [Point x y z | z <- [z1..z2], y <- [y1..y2], x <- [x1..x2]]
-
-    index (Point xmin ymin zmin, Point xmax ymax zmax) (Point x y z) =
-        let xidx = index (xmin, xmax) x
-            yidx = index (ymin, ymax) y
-            zidx = index (zmin, zmax) z
-            xSize = rangeSize (xmin, xmax)
-            ySize = rangeSize (ymin, ymax)
-         in xidx + (yidx * xSize) + (zidx * xSize * ySize)
-
-    inRange (Point xmin ymin zmin, Point xmax ymax zmax) (Point x y z) =
-        (x >= xmin) && (x <= xmax) && (y >= ymin) && (y <= ymax) && (z >= zmin) && (z <= zmax)
+type Point = (Int, Int, Int)
 
 type Space = Array Point Cube
 
@@ -64,12 +39,12 @@ getNeighbors s p =
         neighboringPoints = map (applyDirection p) directions
      in map (getCube s) neighboringPoints
  where
-    applyDirection (Point x y z) (dx, dy, dz) = Point (dx x) (dy y) (dz z)
+    applyDirection (x, y, z) (dx, dy, dz) = (dx x, dy y, dz z)
 
 addBorders :: Space -> Space
 addBorders s =
-    let (Point xmin ymin zmin, Point xmax ymax zmax) = Array.bounds s
-        newRange = (Point (xmin - 1) (ymin - 1) (zmin - 1), Point (xmax + 1) (ymax + 1) (zmax + 1))
+    let ((xmin, ymin, zmin), (xmax, ymax, zmax)) = Array.bounds s
+        newRange = ((xmin - 1, ymin - 1, zmin - 1), (xmax + 1, ymax + 1, zmax + 1))
         emptySpace = Array.listArray newRange $ repeat Inactive
      in emptySpace // Array.assocs s
 
@@ -92,7 +67,7 @@ parsePlane input = do
     let rowLen = length row
     unless (all ((== rowLen) . length) rows) $ throwM ParseError
 
-    return $ Array.listArray (Point 0 0 0, Point (rowLen - 1) (length plane - 1) 0) $ concat plane
+    return $ Array.listArray ((0, 0, 0), (rowLen - 1, length plane - 1, 0)) $ concat plane
  where
     parseRow :: MonadThrow m => String -> m [Cube]
     parseRow = mapM parseCube
