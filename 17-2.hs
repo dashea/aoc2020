@@ -22,8 +22,6 @@ type Space = Array Point Cube
 -- safe-ish array index, will still bomb out if accessing an unset index in a sparse array
 (!?) :: (Ix i, MonadThrow m) => Array i e -> i -> m e
 (!?) a i =
-    -- liftIO $ traceIO $ "Bounds: " ++ show (Array.bounds a)
-    -- liftIO $ traceIO $ "In range: " ++ show i ++ ", " ++ show (inRange (Array.bounds a) i)
     if inRange (Array.bounds a) i then return (a ! i) else throwM ArrayIndexOutOfBounds
 
 getCube :: Space -> Point -> Cube
