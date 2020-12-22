@@ -473,3 +473,26 @@ executable 19-2
                      -Wredundant-constraints
                      -Wpartial-fields
                      -Werror
+
+executable 22-1
+  main-is:           22-1.hs
+  build-depends:     base >=4.14 && <4.15,
+                     text >=1.2.3.2 && <1.3
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
+
+executable 22-2
+  main-is:           22-2.hs
+  build-depends:     base >=4.14 && <4.15,
+                     text >=1.2.3.2 && <1.3,
+                     unordered-containers >=0.2.13.0 && <0.3
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
