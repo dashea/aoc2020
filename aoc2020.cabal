@@ -550,3 +550,13 @@ executable 22-2
                      -Wredundant-constraints
                      -Wpartial-fields
                      -Werror
+
+executable 23-1
+  main-is:           23-1.hs
+  build-depends:     base >=4.14 && <4.15
+  default-language:  Haskell2010
+  ghc-options:       -Wall
+                     -Wincomplete-uni-patterns
+                     -Wredundant-constraints
+                     -Wpartial-fields
+                     -Werror
