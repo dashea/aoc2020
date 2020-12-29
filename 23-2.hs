@@ -1,43 +1,61 @@
-import qualified Data.IntMap as IntMap
-import           Data.IntMap (IntMap, (!))
+{-# LANGUAGE ScopedTypeVariables #-}
 
-doTurn :: Int -> Int -> Int -> IntMap Int -> (Int, IntMap Int)
-doTurn lowest highest current input =
-    let take1 = input ! current
-        take2 = input ! take1
-        take3 = input ! take2
-        takeNext = input ! take3
-        targetCup = destination (current - 1) [take1, take2, take3]
+import Data.Array (Array, array)
+import Data.Array.IO (IOArray)
+import Data.Array.MArray (MArray, getBounds, readArray, thaw, writeArray)
+import Data.Ix (Ix)
 
-        cupsRemoved = IntMap.insert current takeNext input
-        cupsAdded1 = IntMap.insert targetCup take1 cupsRemoved
-        cupsAdded2 = IntMap.insert take3 (input ! targetCup) cupsAdded1
-     in (cupsAdded2 ! current, cupsAdded2)
+doTurn :: forall a m i . (MArray a i m, Ix i, Num i) => i -> a i i -> m i
+doTurn current input = do
+    (lowest, highest) <- getBounds input
+    take1 <- readArray input current
+    take2 <- readArray input take1
+    take3 <- readArray input take2
+    takeNext <- readArray input take3
+    let targetCup = destination lowest highest (current - 1) [take1, take2, take3]
+
+    targetNext <- readArray input targetCup
+
+    -- link "current" to the cup after the 3 taken
+    writeArray input current takeNext
+    -- link the destination to the first of the 3 cups taken
+    writeArray input targetCup take1
+    -- link the last of the 3 cups taken to the cup that was after the destination
+    writeArray input take3 targetNext
+
+    readArray input current
  where
-    destination :: Int -> [Int] -> Int
-    destination currentCup taken
-      | currentCup < lowest = destination highest taken
-      | currentCup `elem` taken = destination (currentCup - 1) taken
+    destination :: i -> i -> i -> [i] -> i
+    destination lowest highest currentCup taken
+      | currentCup < lowest = destination lowest highest highest taken
+      | currentCup `elem` taken = destination lowest highest (currentCup - 1) taken
       | otherwise = currentCup
 
-makeCups :: [Int] -> IntMap Int
+doTurns :: (MArray a i m, Ix i, Num i, Num j, Eq j) => j -> i -> a i i -> m ()
+doTurns 0 _ _ = return ()
+doTurns x current input = do
+    next <- doTurn current input
+    doTurns (x - 1) next input
+
+makeCups :: [Int] -> Array Int Int
 makeCups [] = error "Empty list"
-makeCups (x:xs) = makeCups' IntMap.empty x xs
+makeCups input@(x:xs) = array (minimum input, maximum input) $ makeCups' [] x xs
  where
     makeCups' acc cur (x':xs') =
-        let acc' = IntMap.insert cur x' acc
+        let acc' = (cur, x') : acc
          in makeCups' acc' x' xs'
-    makeCups' acc cur [] = IntMap.insert cur x acc
+    makeCups' acc cur [] = (cur, x) : acc
 
 main :: IO ()
 main = do
     let startingCups = map (\c -> read [c]) "952438716"
         extendedCups = startingCups ++ [(maximum startingCups + 1) .. 1000000]
-        lowest = minimum extendedCups
-        highest = maximum extendedCups
         circle = makeCups extendedCups
 
-    let (_, endingCups) = iterate (uncurry (doTurn lowest highest)) (head startingCups, circle) !! 10000000
-        a = endingCups ! 1
-        b = endingCups ! a
+    mCircle <- thaw circle :: IO (IOArray Int Int)
+    doTurns (10000000 :: Int) (head startingCups) mCircle
+
+    a <- readArray mCircle 1
+    b <- readArray mCircle a
+
     print $ a * b
